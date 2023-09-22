@@ -3,6 +3,8 @@ import pandas as pd
 import random
 import os
 
+import re
+
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -22,9 +24,15 @@ class SongLyricClassifier:
         # genre_counts = self.songData['tag'].value_counts()
         # print(genre_counts)
 
+    def tokenize(text):
+        text = text.lower()
+        words = re.findall(r'\w+', text)
+        return words
+
     def preprocessText(self, lyrics):
         if pd.notna(lyrics):
-            words = nltk.word_tokenize(lyrics.lower())
+            # words = nltk.word_tokenize(lyrics.lower())
+            words = self.tokenize(lyrics)
             words = [word for word in words if word.isalnum() and word not in stopwords.words('english')]
             lemmatizer = WordNetLemmatizer()
             words = [lemmatizer.lemmatize(word) for word in words]
